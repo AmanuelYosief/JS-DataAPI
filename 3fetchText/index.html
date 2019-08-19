@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fetch Text</title>
+</head>
+
+<body>
+    <h1>Fetching Text Poem</h1>
+    <p id = "poem"></p> 
+    <script>
+        /* 1. Set the ID of item
+           2. Create async function to catch and wait, then response response
+           3. Call the function, set ID to response.
+           4. Catch errors
+        */ 
+    console.log('about to fetch a poem');
+
+    
+    catchPoem()
+    .then(poem =>{
+        document.getElementById('poem').innerText = poem;
+        console.log('worked')
+    }).catch(error =>{
+        console.log('error!');
+        console.error(error);
+    });
+
+    async function catchPoem(){
+        const response = await fetch('poem.txt');
+        return await response.text();
+    }
+    </script>
+</body>
+</html>

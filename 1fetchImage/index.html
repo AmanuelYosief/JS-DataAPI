@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fetch Rainbow</title>
+</head>
+<body>
+
+    <img src="" id="rainbow" width="480"/>
+    <script> 
+    console.log('about to fetch a rainbow');    
+    // A fetch function returns a promise. It gets resolved when the data is retrieved.
+    // You can use the method "then" to handle this response and what i want to do. In this example,
+    // we convert to a blob and then into an image
+    fetch('rainbow.jpg')
+    .then(response=> {
+        console.log(response);  // Printing out response and it's metadata
+        return response.blob(); // Convert response into an image blob
+    })  //  That triggers another promise, you can chain them by ".then" again.
+    .then(blob=>{ // blob is just a rename of response 
+        console.log(blob);
+        document.getElementById('rainbow').src = URL.createObjectURL(blob);
+    }); 
+
+    </script>
+
+    <script>
+    /*
+        First script did not handle Error or log error when something goes wrong
+        Introduced java keywords. ASYNC/WAIT. To handle promise in a slightly
+        more readable, condensed and elegant way. Instead of the (.THEN) method.
+    */
+    console.log('about to fetch a rainbow');
+    catchRainbow()
+    .then(response => {
+        console.log('yay');
+    })
+    .catch(error => {
+        console.log('error!');
+        console.error(error);
+    }); 
+    async function catchRainbow(){
+        const response = await fetch('rainbow.jpg');
+        const blob = await response.blob();
+        document.getElementById('rainbow2').src = URL.createObjectURL(blob);
+    }
+    </script>
+</body>
+</html>

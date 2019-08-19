@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Array of Images</title>
+</head>
+<body>
+    <h1>Fetch an Array of Images</h1>
+
+    <script>
+    console.log("about to fetch some rainbows");
+
+    /* 1. Create an array of local stored files
+       2. Create Asyn Function that retrieves the array, loops through and creates Img file
+       3. Call Async Function and error handling
+    */
+    const filenames = [
+        'rainbow.jpg',
+        'rainbow2.jpg',
+        'rainbow3.jpg'
+    ];
+
+    catchRainbows(filenames)
+    .then(response=>{
+        console.log('worked');
+    }).catch(error =>{
+        console.log('error!');
+        console.error(error);
+    });
+
+    async function catchRainbows(filenames){
+        for(let filename of filenames){
+            const response = await fetch(filename);
+            const blob = await response.blob();
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            img.width='200';
+            document.body.append(img);
+        }
+    }
+
+    </script>
+
+</body>
+</html>
