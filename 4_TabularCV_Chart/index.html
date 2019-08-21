@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chart CV Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+</head>
+<body>
+    
+    
+    <canvas id="chart" width="800" height="400"></canvas> 
+    <script>
+    const xs = []; 
+    const ys = [];
+    
+async function chartIt(){
+    const data = await getData();
+    const ctx = document.getElementById('chart').getContext('2d');
+
+    const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: data.xs, // Instead having an Array of Labels, we can retrieve it from cvs.
+        datasets: [{
+            label: 'Combined Land-Surface Air and Sea-Suface Water Temperature in °C',
+            data: data.ys, // Retrieving data from the cvs 
+            backgroundColor:'rgb(124, 242, 242)', // Can set multiple array of colours
+            borderColor:'rgb(124, 242, 242)',
+            borderWidth: 1,
+            fill: false,
+        },
+    ],
+    }
+});
+}
+    chartIt(); 
+    /* getData() is an async function, it is happening at the same time. 
+    We want it to happen after we get data.
+    */
+    async function getData() {
+        // Wait for retrieve the file
+        const response = await fetch('ZonAnn.Ts+dSST.csv');
+        // Save the file and convert it to text
+        const data = await response.text();
+        // Print the text out console.log(data);
+        const table = data.split('\n').slice(1); 
+        /*
+        Take whole table, Split into rows by line breaker,
+        .slice the database within the range we want
+        */
+        table.forEach(row =>{
+            const columns = row.split(',');
+            const year = columns[0];
+            const temp = columns[1];
+            // Push the row and data into our variable arrays
+            xs.push(year);
+            ys.push(parseFloat(temp)) ;
+            // console.log(year, temp);
+        });
+        return{xs,ys}; 
+    }
+    </script>
+</body>
+</body>
+</html>
